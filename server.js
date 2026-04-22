@@ -1,3 +1,5 @@
+require("dotenv").config(); // 👈 IMPORTANTE (DEBE IR ARRIBA)
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -10,7 +12,7 @@ app.use(express.json());
 // 🔥 CONEXIÓN SEGURA
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ Conectado a MongoDB"))
-  .catch(err => console.log("❌ Error:", err));
+  .catch(err => console.log("❌ Error MongoDB:", err));
 
 // 📦 MODELO
 const Producto = mongoose.model("Producto", {
@@ -21,11 +23,9 @@ const Producto = mongoose.model("Producto", {
 });
 
 // 📥 GET
-app.get("/productos", async (req, res) => {
-  const productos = await Producto.find();
-  res.json(productos);
+app.get("/", (req, res) => {
+  res.send("🚀 API Inventario funcionando correctamente");
 });
-
 // 📤 POST
 app.post("/productos", async (req, res) => {
   const nuevo = new Producto(req.body);
@@ -43,5 +43,5 @@ app.delete("/productos/:id", async (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log("🚀 Servidor en puerto", PORT);
+ console.log("MONGO_URI:", process.env.MONGO_URI);
 });
